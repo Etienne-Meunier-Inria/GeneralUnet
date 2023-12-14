@@ -167,12 +167,15 @@ class UNetClean(nn.Module):
         return output.shape, hidden_feats.shape
 
     @staticmethod
-    def add_specific_args(parent_parser):
-        parser = ArgumentParser(parents=[parent_parser], add_help=False)
-        parser.add_argument('--unet.train_bn', action='store_true')
-        parser.add_argument('--unet.num_layers', type=int, default=3)
-        parser.add_argument('--unet.features_start', type=int, default=32)
-        parser.add_argument('--unet.padding_mode', type=str, choices=['zeros', 'reflect'], default='zeros')
-        parser.add_argument('--unet.inner_normalisation', '-inm', type=str, choices=['InstanceNorm', 'BatchNorm', 'None',
-                                                                                     'cInstanceNorm2d', 'cBlockNorm3d'], default='InstanceNorm')
+    def add_specific_args(parser, prefix=''):
+        #parser = ArgumentParser(parents=[parent_parser], add_help=False)
+        prefix += 'unet.'
+        parser.add_argument(f'--{prefix}train_bn', action='store_true')
+        parser.add_argument(f'--{prefix}num_layers', type=int, default=3)
+        parser.add_argument(f'--{prefix}features_start', type=int, default=32)
+        parser.add_argument(f'--{prefix}padding_mode', type=str, choices=['zeros', 'reflect'], default='reflect')
+        parser.add_argument(f'--{prefix}inner_normalisation', '-inm', type=str, choices=['InstanceNorm', 'BatchNorm', 'None',
+                                                                                     'cInstanceNorm2d', 'cBlockNorm3d',
+                                                                                     'cBlockNorm3dSmooth',
+                                                                                     'cBlockNorm3dSmoothV2'], default='InstanceNorm')
         return parser

@@ -63,20 +63,13 @@ class Up(nn.Module):
                 nn.Conv2d(in_ch, out_ch, kernel_size=1, padding_mode=padding_mode),
             )
         else:
+            if padding_mode != 'zeros':
+                 print(f"Could not apply '{padding_mode}' in upsampling used padding_mode='zeros'")
             self.upsample = nn.ConvTranspose2d(in_ch, out_ch, kernel_size=scale_factor, stride=scale_factor,
-                                               padding_mode=padding_mode)
+                                               padding_mode='zeros')
 
     def forward(self, x1):
         return self.upsample(x1)
-
-    @staticmethod
-    def add_specific_args(parent_parser):
-        parser = ArgumentParser(parents=[parent_parser], add_help=False)
-        parser.add_argument('--bilinear', action='store_true',
-                            help='bilinear upsampling in unet instead of convtranspose')
-        return parser
-
-
 
 class Unet2D_2D(UNetClean) :
     lalevels = { 'down' : Down,
@@ -88,10 +81,3 @@ class Unet2D_2D(UNetClean) :
 
     def __init__(self, **kwargs) :
         super().__init__(**kwargs)
-
-
-    @staticmethod
-    def add_specific_args(parent_parser):
-        parser = ArgumentParser(parents=[parent_parser], add_help=False)
-        parser = Up.add_specific_args(parent_parser)
-        return parser

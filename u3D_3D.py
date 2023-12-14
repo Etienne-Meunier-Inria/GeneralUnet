@@ -1,17 +1,18 @@
 from .unet_clean import UNetClean
 import torch.nn as nn
-from .internals.layers import cInstanceNorm2d, cBlockNorm3d
+from .internals.layers import cInstanceNorm2d, cBlockNorm3d, cBlockNorm3dSmooth, cBlockNorm3dSmoothV2
 
 class DoubleConv(nn.Module):
     """
     [ Conv3d => BatchNorm (optional) => ReLU ] x 2
     """
 
-    def __init__(self, in_ch: int, out_ch: int, train_bn: bool, inner_normalisation: bool, padding_mode:str, **kwargs):
+    def __init__(self, in_ch: int, out_ch: int, train_bn: bool, inner_normalisation: str, padding_mode:str, **kwargs):
         super().__init__()
         inm = {'InstanceNorm':nn.InstanceNorm3d, 'BatchNorm':nn.BatchNorm3d,
                 'None' : nn.Identity, 'cInstanceNorm2d' : cInstanceNorm2d,
-                'cBlockNorm3d' :cBlockNorm3d}[inner_normalisation]
+                'cBlockNorm3d' :cBlockNorm3d, 'cBlockNorm3dSmooth' : cBlockNorm3dSmooth,
+                'cBlockNorm3dSmoothV2': cBlockNorm3dSmoothV2}[inner_normalisation]
         self.net = nn.Sequential(
             nn.Conv3d(in_ch, out_ch, kernel_size=3, padding=1, padding_mode=padding_mode),
             inm(out_ch, track_running_stats=train_bn),
