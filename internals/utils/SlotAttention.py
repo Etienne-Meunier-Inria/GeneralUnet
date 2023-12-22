@@ -3,7 +3,6 @@ import torch, einops
 from torch.nn import init
 from argparse import ArgumentParser
 from ipdb import set_trace
-from ExperimentalFlag import ExperimentalFlag as Ef
 
 import sys
 from ShapeChecker import ShapeCheck
@@ -97,8 +96,6 @@ class SlotAttention(nn.Module) :
         for _ in range(self.iters-1):
             queries =  self.step(queries, k, v, sc)
 
-        if Ef.check('ImplicitDifferentiation') :
-            queries = queries.detach()
         queries = self.step(queries, k, v, sc)
 
         return queries

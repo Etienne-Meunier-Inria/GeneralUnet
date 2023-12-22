@@ -1,7 +1,5 @@
 import torch.nn as nn
 import torch, einops
-from ExperimentalFlag import ExperimentalFlag as Ef
-
 
 
 class TransformerAttention(nn.Module) :
@@ -16,9 +14,8 @@ class TransformerAttention(nn.Module) :
         super().__init__()
         decoder_layer = nn.TransformerDecoderLayer(d_model=queries_dim, nhead=nhead, batch_first=True)
         self.transformer_decoder = nn.TransformerDecoder(decoder_layer, num_layers=num_layers)
-        if Ef.check('TransformerDecoderXavier') :
-             print('Init transformer decoder using Xavier')
-             self._reset_parameters()
+        print('Init transformer decoder using Xavier : TransformerDecoderXavier')
+        self._reset_parameters()
 
     def forward(self, queries, memory_features):
         return self.transformer_decoder(queries, memory_features)

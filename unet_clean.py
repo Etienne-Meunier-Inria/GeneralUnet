@@ -173,9 +173,9 @@ class UNetClean(nn.Module):
         parser.add_argument(f'--{prefix}train_bn', action='store_true')
         parser.add_argument(f'--{prefix}num_layers', type=int, default=3)
         parser.add_argument(f'--{prefix}features_start', type=int, default=32)
-        parser.add_argument(f'--{prefix}padding_mode', type=str, choices=['zeros', 'reflect'], default='reflect')
+        parser.add_argument(f'--{prefix}padding_mode', type=str, choices=['zeros', 'reflect'], default='zeros')
         parser.add_argument(f'--{prefix}inner_normalisation', '-inm', type=str, choices=['InstanceNorm', 'BatchNorm', 'None',
                                                                                      'cInstanceNorm2d', 'cBlockNorm3d',
                                                                                      'cBlockNorm3dSmooth',
-                                                                                     'cBlockNorm3dSmoothV2'], default='InstanceNorm')
+                                                                                     'cBlockNorm3dSmoothV2'], default='cBlockNorm3d')
         return parser

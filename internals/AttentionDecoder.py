@@ -5,7 +5,6 @@ from .utils.PositionalEmbedding import PositionalEmbedding
 from .utils.SlotAttention import SlotAttention
 from .utils.TransformerAttention import TransformerAttention
 from .utils.Queries import Queries
-#from ExperimentalFlag import ExperimentalFlag as Ef
 
 
 Attentions = {'transformer' : TransformerAttention, 'slot' : SlotAttention}
@@ -46,8 +45,6 @@ class AttentionDecoder(nn.Module) :
         num_classes = num_classes if num_classes is not None else self.num_classes
         q = self.queries.get_init_queries(memory_features.shape[0], num_classes).to(memory_features.device)
         out_queries = self.decoder(q, memory_features)
-        # if Ef.check('SkipConnectionQueries') :
-        #     out_queries = out_queries + q
         return out_queries
 
 
